@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>students api</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ </head>
+<body>
+<div>
+    <a href="{% url 'insert'%}"><button >Insert</button></a>
+    <a href="{% url 'update'%}"><button >Update</button></a>
+    <a href="{% url 'delete'%}"><button >Delete</button></a>
+   <button class="apireq">Display</button> 
+</div>
+<div id="jsonresp" style="margin-top: 100px">
+   <table id="tbl" border="1">
+      
+   </table>
+</div>
+<script type="text/javascript">
+    $('.apireq').click( function() {
+      data1 = {}
+      data1['id'] = 'x';
+    $.ajax({
+             url : "studentsapi",
+             dataType: "json",
+             contentType: "application/json",
+             data: JSON.stringify(data1),
+             success : function (data) {
+                      display_students(data);
+                    }
+                 });
+             });
+
+    $('.apiupdate').click( function() {
+    data1 = {}
+    data1['id'] = 'x';
+    $.ajax({
+            url : "studentsapi",
+            dataType: "json",
+             contentType: "application/json",
+            data: JSON.stringify(data1)
+            });
+         });
+    function display_students(students_data){
+       output = '<tr><th>First Name</th><th>Last Name</th><th>Age</th><th>Gender</th></tr>';
+      for(var i = 0; i < students_data.length; i ++) {
+         output += '<tr>';
+         output += '<td>' + students_data[i].first_name + '</td>';
+         output += '<td>' + students_data[i].last_name + '</td>';
+         output += '<td>' + students_data[i].age + '</td>';
+         output += '<td>' + students_data[i].gender + '</td>';
+         output += '<td><button class="apiupdate" value="' + students_data[i].id + '">edit</button> <button>delete</button><td>';
+         output += '</tr>';
+      }
+      tbl.innerHTML = output;
+    }
+</script>
+</body>
+</html>

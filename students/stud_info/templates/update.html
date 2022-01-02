@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>students api</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ </head>
+<body>
+<div>
+    <a href="{% url 'insert'%}"><button >Insert</button></a>
+    <a href="{% url 'delete'%}"><button >Delete</button></a>
+    <a href="{% url 'home'%}"><button >Home</button></a>
+    id: <input type="text" id="id" value="{%{{student_data.id}}%}">
+    First Name: <input type="text" id="fn" value="{%{{student_data.first_name}}%}">
+    Last Name: <input type="text" id="ln" value="{%{{student_data.last_name}}%}"> 
+    Age: <input type="number" id="age" value="{%{{student_data.age}}%}">
+    Gender: <input type="text" maxlength="1" id="ge" value="{%{{student_data.gender}}%}">
+    <button class="apireq">click me </button> 
+</div>
+<div id="jsonresp" style="margin-top: 100px">
+</div>
+<script type="text/javascript">
+    $('.apireq').click( function() {
+    data1 = {}
+    data1['id'] = id.value;
+    data1['first_name'] = fn.value;
+    data1['last_name'] = ln.value;
+    data1['age'] = age.value;
+    data1['gender'] = ge.value;
+    console.log(data1)
+    $.ajax({
+             url : "studentsapi",
+             dataType: "json",
+             contentType: "application/json",
+             data: JSON.stringify(data1),
+             type:"put",
+             success : function (data) {
+                      $('#jsonresp').text( data);
+                      console.log(data)
+                    }
+                 });
+             });
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>students api</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ </head>
+<body>
+<div>
+    <a href="{% url 'insert'%}"><button >Insert</button></a>
+    <a href="{% url 'update'%}"><button >Update</button></a>
+    <a href="{% url 'home'%}"><button >Home</button></a>
+    id: <input type="text" id="id">
+    <button class="apireq">click me </button> 
+</div>
+<div id="jsonresp" style="margin-top: 100px">
+</div>
+<script type="text/javascript">
+    $('.apireq').click( function() {
+    data1 = {}
+    data1['id'] = id.value;
+    console.log(data1)
+    $.ajax({
+             url : "studentsapi",
+             dataType: "json",
+             contentType: "application/json",
+             data: JSON.stringify(data1),
+             type:"delete",
+             success : function (data) {
+                      $('#jsonresp').text( data);
+                      console.log(data)
+                    }
+                 });
+             });
+</script>
+</body>
+</html>
