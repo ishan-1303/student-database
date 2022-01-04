@@ -48,8 +48,8 @@ def homepage(request):
 def insertpage(request):
     return render(request, 'insert.html')
 
-def deletepage(request):
-    return render(request, 'delete.html')
+# def deletepage(request):
+#     return render(request, 'delete.html')
 
-def updatepage(request):
-    return render(request, 'update.html')
+# def updatepage(request):
+#     return render(request, 'update.html')

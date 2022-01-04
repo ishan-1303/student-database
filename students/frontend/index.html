@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>students api</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ </head>
+<body>
+<div>
+    <a href="{% url 'insert'%}"><button >Insert new student</button></a>
+   <button class="apireq">View all students</button> 
+</div>
+<div style="margin-top: 100px">
+   <table id="tbl" border="1">
+      
+   </table>
+   <p id="jsonresp"></p>
+</div>
+<script type="text/javascript">
+   $('.apireq').click( function() {
+      read();
+   });
+
+   function read() {
+      $.ajax({
+      url : "studentsapi",
+      success : function (data) {
+            display_students(data);
+         }
+      });
+   }
+    
+   function display_students(students_data){
+      output = '<tr><th>First Name</th><th>Last Name</th><th>Age</th><th>Gender</th></tr>';
+      for(var i = 0; i < students_data.length; i ++) {
+         output += '<tr>';
+         output += '<td>' + students_data[i].first_name + '</td>';
+         output += '<td>' + students_data[i].last_name + '</td>';
+         output += '<td>' + students_data[i].age + '</td>';
+         output += '<td>' + students_data[i].gender + '</td>';
+         output += '<td><button data-id="' + students_data[i].id + '" onclick="update_event(this)">edit</button> <button data-id="' + students_data[i].id + '" onclick="delete_(this)">delete</button><td>';
+         output += '</tr>';
+      }
+      tbl.innerHTML = output;
+      jsonresp.innerHTML = '';
+   }
+
+   function update_event(cell) {
+      $.ajax({
+      url : "studentsapi?id=" + cell.getAttribute('data-id'),
+      success : function (data) {
+            update(data);
+         }
+      });
+   }
+
+     function update_data(cell) {
+      data1 = {}
+      data1['id'] = cell.getAttribute('data-id');
+      data1['first_name'] = fn.innerText;
+      data1['last_name'] = ln.innerText;
+      data1['age'] = age.innerText;
+      data1['gender'] = ge.innerText;
+      console.log(data1)
+      $.ajax({
+         url : "studentsapi",
+         dataType: "json",
+         contentType: "application/json",
+         data: JSON.stringify(data1),
+         type:"put",
+         success : function (data) {
+               $('#jsonresp').text( data);
+               console.log(data)
+            }
+      });
+   }
+
+   function update(students_data) {
+      output = '<tr><th>First Name</th><th>Last Name</th><th>Age</th><th>Gender</th></tr>';
+      output += '<tr>';
+      output += '<td contenteditable id="fn">' + students_data.first_name + '</td>';
+      output += '<td contenteditable id="ln">' + students_data.last_name + '</td>';
+      output += '<td contenteditable id="age">' + students_data.age + '</td>';
+      output += '<td contenteditable id="ge">' + students_data.gender + '</td>';
+      output += '<td><button class="apiupdate" data-id="' + students_data.id + '" onclick="update_data(this)">update</button></td>';
+      output += '</tr>';
+      tbl.innerHTML = output;
+   }
+
+   function delete_(cell){
+      data1 = {}
+      data1['id'] = cell.getAttribute('data-id');
+      console.log(data1)
+      $.ajax({
+         url : "studentsapi",
+         dataType: "json",
+         contentType: "application/json",
+         data: JSON.stringify(data1),
+         type:"delete",
+         success : function (data) {
+            $('#jsonresp').text( data);
+            read();
+         }
+      }); 
+   }
+
+</script>
+</body>
+</html>
