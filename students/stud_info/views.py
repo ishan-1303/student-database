@@ -7,9 +7,17 @@ from .serializers import studentSerializer
 
 class Get_students_List(APIView):
     def get(self, request):
-        students = Students.objects.all()
-        serialized = studentSerializer(students, many=True)
-        return Response(serialized.data)
+        students_data = request.GET.get("id") #JSONParser().parse(request)
+        if(students_data):
+            students = Students.objects.get(id=students_data)
+            serialized = studentSerializer(students)
+            return Response(serialized.data)
+        else:
+            students = Students.objects.all()
+            serialized = studentSerializer(students, many=True)
+            return Response(serialized.data)
+            
+        return Response('Error')
 
     def post(self, request):
         students_data = JSONParser().parse(request)
